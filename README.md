@@ -39,3 +39,10 @@ The trade-off: we use the normal equations `Aᵀ A c = Aᵀ y` and invert `Aᵀ 
 The denominator is parametrised with its constant term `b₀` fixed at `1`. This removes the scaling ambiguity (a rational function is only defined up to a common factor in numerator and denominator) but it also means the library **cannot represent** any rational function whose true denominator has `b₀ = 0`. For example, `y = x / (x + 1)` is representable (`q = [1, 1]`), but `y = 1 / x` is not — its denominator is `q = [0, 1]`, and with `b₀` forced to `1` the fit will be poor. If you know the denominator has no constant term, subtract the known root structure from your data or choose a different parametrisation before calling this library.
 
 A secondary consequence: duplicate `x` values in the input, or an underdetermined degree choice, will produce an exactly singular normal-equations matrix and raise `ZeroDivisionError`. This is deliberate — the fit genuinely is not unique, and returning a silent least-squares guess would hide the problem.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
