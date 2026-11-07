@@ -1,6 +1,6 @@
 [project]
 name = "rational-function-fitting-utils"
-version = "0.1.0"
+version = "0.1.1"
 description = "Exact rational function fitting over Python fractions with no floating-point rounding"
 requires-python = ">=3.10"
 dependencies = []
